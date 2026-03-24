@@ -193,10 +193,11 @@ export const PreviewArea = ({
               } : undefined}
               dragElastic={0.1}
               dragMomentum={false}
-              className={cn("w-full flex flex-col items-center justify-center cursor-move active:cursor-grabbing")}
+              className={cn("w-full flex flex-col cursor-move active:cursor-grabbing")}
               style={{
                 maxHeight: `calc(${height}px - ${style.padding * 2}px)`,
                 alignItems: style.textAlign === 'center' ? 'center' : style.textAlign === 'left' ? 'flex-start' : 'flex-end',
+                justifyContent: 'center',
                 textAlign: style.textAlign,
               }}
             >
@@ -210,6 +211,7 @@ export const PreviewArea = ({
                 )}
                 style={{ 
                   fontSize: `${style.fontSize}px`,
+                  textAlign: style.textAlign,
                   color: 'inherit',
                   height: 'auto',
                   maxHeight: `calc(${height}px - ${style.padding * 2}px)`,

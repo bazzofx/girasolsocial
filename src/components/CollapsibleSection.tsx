@@ -52,7 +52,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           </div>
         </div>
         <ChevronDown className={cn(
-          "w-4 h-4 text-gray-400 transition-transform duration-300",
+          "w-5 h-5 text-gray-400 transition-transform duration-300",
           isOpen ? "rotate-180 text-yellow-600" : ""
         )} />
       </button>

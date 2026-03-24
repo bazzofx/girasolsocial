@@ -82,60 +82,60 @@ export const Sidebar = ({
         "fixed lg:static inset-y-0 left-0 z-50 w-80 border-r border-gray-200 bg-white flex flex-col overflow-hidden shrink-0 transition-transform duration-300 ease-in-out",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-none"
       )}>
-        <div className="p-6 border-b border-gray-100 bg-black relative flex flex-col gap-2">
+        <div className="p-4 border-b border-gray-100 bg-black relative flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <button 
-              onClick={() => setShowLanding(true)}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <div className="p-2 bg-yellow-400 rounded-lg shadow-lg shadow-yellow-900/20">
-                <Sun className="w-5 h-5 fill-red-400 text-black" />
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setShowLanding(true)}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <div className="p-1.5 bg-yellow-400 rounded-lg shadow-lg shadow-yellow-900/20">
+                  <Sun className="w-4 h-4 fill-red-400 text-black" />
+                </div>
+                <h1 className="text-lg font-bold tracking-tight text-white">{t('app_name')}</h1>
+              </button>
+
+              <div className="flex items-center gap-1.5 ml-1">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={cn(
+                    "transition-all",
+                    language === 'en' ? "scale-110" : "opacity-40 hover:opacity-100"
+                  )}
+                  title="English"
+                >
+                  <img 
+                    src="https://flagcdn.com/w40/gb.png" 
+                    alt="UK flag" 
+                    className="w-4 h-4 object-contain"
+                  />
+                </button>
+                <button
+                  onClick={() => setLanguage('pt')}
+                  className={cn(
+                    "transition-all",
+                    language === 'pt' ? "scale-110" : "opacity-40 hover:opacity-100"
+                  )}
+                  title="Português (Brasil)"
+                >
+                  <img 
+                    src="https://flagcdn.com/w40/br.png" 
+                    alt="Brazil flag" 
+                    className="w-4 h-4 object-contain"
+                  />
+                </button>
               </div>
-              <h1 className="text-xl font-bold tracking-tight text-white">{t('app_name')}</h1>
-            </button>
+            </div>
 
             <button 
               onClick={() => setIsSidebarOpen(false)}
               className="p-2 text-gray-400 hover:text-white lg:hidden transition-colors"
             >
-              <X className="w-10 h-10" />
+              <X className="w-8 h-8" />
             </button>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 p-1.5 rounded-xl border">
-              <button
-                onClick={() => setLanguage('en')}
-                className={cn(
-                  "w-8 h-8 flex items-center justify-center rounded-lg transition-all",
-                  language === 'en' ? "shadow-sm scale-110" : "opacity-40 hover:opacity-100"
-                )}
-                title="English"
-              >
-                <img 
-                  src="https://flagcdn.com/w40/gb.png" 
-                  alt="UK flag" 
-                  className="w-6 h-6 object-contain"
-                />
-              </button>
-              <button
-                onClick={() => setLanguage('pt')}
-                className={cn(
-                  "w-8 h-8 flex items-center justify-center rounded-lg transition-all",
-                  language === 'pt' ? "shadow-sm scale-110" : "opacity-40 hover:opacity-100"
-                )}
-                title="Português (Brasil)"
-              >
-                <img 
-                  src="https://flagcdn.com/w40/br.png" 
-                  alt="Brazil flag" 
-                  className="w-6 h-6 object-contain"
-                />
-              </button>
-            </div>
-          </div>
-
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{t('app_subtitle')}</p>
+          <p className="text-[9px] font-bold uppercase tracking-widest text-gray-500">{t('app_subtitle')}</p>
         </div>
 
       <div className="flex-1 overflow-y-auto no-scrollbar">
@@ -381,7 +381,7 @@ export const Sidebar = ({
                     value={style.fontFamily}
                     onChange={(e) => setStyle(s => ({ ...s, fontFamily: e.target.value }))}
                     className="w-full p-2 text-xs border border-gray-200 rounded-xl bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-yellow-400 transition-all appearance-none cursor-pointer"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', backgroundSize: '12px' }}
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', backgroundSize: '15px' }}
                   >
                     {FONTS.map(f => (
                       <option key={f.value} value={f.value}>
