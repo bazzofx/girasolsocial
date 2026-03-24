@@ -1,0 +1,43 @@
+export type SplitMode = 'character' | 'separator';
+
+export interface CardStyle {
+  backgroundColor: string;
+  textColor: string;
+  borderColor: string;
+  borderWidth: number;
+  fontSize: number;
+  fontFamily: string;
+  textAlign: 'left' | 'center' | 'right';
+  padding: number;
+  borderRadius: number;
+  showPageNumber: boolean;
+  theme: string;
+  letterSpacing: number;
+  lineHeight: number;
+  textShadow: boolean;
+  gradient: string | null;
+  gradientAngle: number;
+  customGradient: boolean;
+  gradientColor2: string;
+  showInnerFrame: boolean;
+  innerFrameColor: string;
+  innerFrameWidth: number;
+  innerFramePadding: number;
+  title: string;
+  titleAlign: 'left' | 'center' | 'right';
+  footer: string;
+  footerAlign: 'left' | 'center' | 'right';
+  elementIcon: string;
+  elementColor: string;
+  elementOpacity: number;
+  elementQuantity: number;
+  elementSize: number;
+  elementSeed: number;
+  elementRotation: number;
+  elementRandomRotation: boolean;
+  elementBlendMode: string;
+  elementPositionMode: 'random' | 'grid' | 'border';
+  elementZIndex: 'behind' | 'front';
+  texture: string;
+  textureOpacity: number;
+}
