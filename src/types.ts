@@ -1,4 +1,5 @@
 export type SplitMode = 'character' | 'separator';
+export type AspectRatio = '3:4' | '9:16' | '1:1';
 
 export interface CardStyle {
   backgroundColor: string;
@@ -40,4 +41,11 @@ export interface CardStyle {
   elementZIndex: 'behind' | 'front';
   texture: string;
   textureOpacity: number;
+  backgroundImage?: string | null;
+  backgroundImageOpacity: number;
+  backgroundImageTheme: 'nature' | 'abstract' | 'animal';
+  aiImagePrompt?: string;
+  aspectRatio: AspectRatio;
+  credits: string;
+  showCredits: boolean;
 }

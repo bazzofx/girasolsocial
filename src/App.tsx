@@ -10,8 +10,9 @@ import { Sidebar } from './components/Sidebar';
 import { PreviewArea } from './components/PreviewArea';
 import { CardStyle, SplitMode } from './types';
 import { THEMES, FONTS, GRADIENTS, DECORATIVE_ELEMENTS, TEXTURES } from './constants';
-import { X } from 'lucide-react';
+import { X, Sparkles as SparklesIcon, Play, Square as StopIcon, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
+import { GoogleGenAI } from "@google/genai";
 
 export default function App() {
   const [isInstagramConnected, setIsInstagramConnected] = useState(false);
@@ -65,7 +66,16 @@ export default function App() {
     elementZIndex: 'behind',
     texture: 'none',
     textureOpacity: 0.1,
+    backgroundImage: null,
+    backgroundImageOpacity: 0.4,
+    backgroundImageTheme: 'nature',
+    aiImagePrompt: '',
+    aspectRatio: '3:4',
+    credits: '',
+    showCredits: false,
   });
+
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
 
   const [showLanding, setShowLanding] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -75,8 +85,8 @@ export default function App() {
     visual: false,
     typography: false,
     elements: false,
-    border: false,
-    innerBorder: false,
+    borders: false,
+    credits: false,
     title: false,
     footer: false,
     export: false
@@ -87,6 +97,52 @@ export default function App() {
       ...prev,
       [section]: !prev[section]
     }));
+  };
+
+  const handleGenerateAIImage = async () => {
+    if (!cards.length) return;
+    setIsGeneratingImage(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      // Use the first card's text or the full text as context
+      const contextText = cards[0] || text;
+      const prompt = `Create a very simplistic, minimalistic, abstract background image inspired by the following text: "${contextText}". 
+      The image should be themed around ${style.backgroundImageTheme}.
+      The image should be clean, with lots of negative space, and should not distract from text that will be placed on top of it. 
+      Use a soft color palette. No complex objects. Just shapes, gradients, or very simple line art.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash-image',
+        contents: {
+          parts: [{ text: prompt }],
+        },
+        config: {
+          imageConfig: {
+            aspectRatio: style.aspectRatio,
+          },
+        },
+      });
+
+      let imageUrl = null;
+      for (const part of response.candidates?.[0]?.content?.parts || []) {
+        if (part.inlineData) {
+          imageUrl = `data:image/png;base64,${part.inlineData.data}`;
+          break;
+        }
+      }
+
+      if (imageUrl) {
+        setStyle(prev => ({ ...prev, backgroundImage: imageUrl }));
+      } else {
+        throw new Error("No image data returned");
+      }
+    } catch (err) {
+      console.error("AI Image Generation failed:", err);
+      setErrorMessage("Failed to generate AI background. Please try again.");
+      setShareStatus('error');
+    } finally {
+      setIsGeneratingImage(false);
+    }
   };
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -348,6 +404,8 @@ export default function App() {
         isSharing={isSharing}
         shareStatus={shareStatus}
         applyTheme={applyTheme}
+        handleGenerateAIImage={handleGenerateAIImage}
+        isGeneratingImage={isGeneratingImage}
       />
 
       {showAccountSelector && (
