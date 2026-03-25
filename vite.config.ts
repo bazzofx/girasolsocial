@@ -31,7 +31,7 @@ export default defineConfig(({mode}) => {
       // Optional: Listen on all network interfaces
       host: true,
       // Optional: Explicitly set the port (if you want to ensure it's 3000)
-      port: 3000,
+      port: 3099,
     },
   };
 });
