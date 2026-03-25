@@ -389,6 +389,10 @@ export const translations = {
     theme_nature: "Nature",
     theme_abstract: "Abstract",
     theme_animal: "Animal",
+    animate_to_video: "Animate to Video",
+    generating_video: "Generating Video...",
+    video_export_desc: "Generates a short animated video of your cards",
+    select_api_key: "Select API Key",
   },
   pt: {
     // Landing Page
@@ -780,6 +784,10 @@ export const translations = {
     theme_nature: "Natureza",
     theme_abstract: "Abstrato",
     theme_animal: "Animal",
+    animate_to_video: "Animar para Vídeo",
+    generating_video: "Gerando Vídeo...",
+    video_export_desc: "Gera um vídeo animado curto dos seus cartões",
+    select_api_key: "Selecionar Chave API",
   }
 };
 

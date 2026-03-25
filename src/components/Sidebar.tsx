@@ -35,6 +35,8 @@ interface SidebarProps {
   shareStatus: string;
   handleGenerateAIImage: () => void;
   isGeneratingImage: boolean;
+  handleAnimateToVideo: (idx: number) => void;
+  isGeneratingVideo: boolean;
 }
 
 export const Sidebar = ({
@@ -63,7 +65,9 @@ export const Sidebar = ({
   isSharing,
   shareStatus,
   handleGenerateAIImage,
-  isGeneratingImage
+  isGeneratingImage,
+  handleAnimateToVideo,
+  isGeneratingVideo
 }: SidebarProps) => {
   console.log('Using monolithic Sidebar');
   const { t, language, setLanguage } = useTranslation();
@@ -985,7 +989,23 @@ export const Sidebar = ({
       </div>
 
       {/* Fixed Bottom Export Section */}
-      <div className="p-6 border-t border-gray-100 bg-white">
+      <div className="p-6 border-t border-gray-100 bg-white space-y-3">
+        <button
+          onClick={() => handleAnimateToVideo(0)}
+          disabled={isGeneratingVideo || cards.length === 0}
+          className={cn(
+            "w-full py-3 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-200 text-black rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg shadow-yellow-100 active:scale-[0.98] hover:shadow-xl hover:-translate-y-0.5",
+            isGeneratingVideo && "animate-pulse"
+          )}
+        >
+          {isGeneratingVideo ? (
+            <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <Play className="w-5 h-5 fill-black" />
+          )}
+          {isGeneratingVideo ? t('generating_video' as any) : t('animate_to_video' as any)}
+        </button>
+
         <button
           onClick={handleExportAll}
           disabled={cards.length === 0}
@@ -994,7 +1014,7 @@ export const Sidebar = ({
           <Download className="w-5 h-5" />
           {t('export_cards', { count: cards.length })}
         </button>
-        <p className="text-[10px] text-center text-gray-400 font-medium mt-3">
+        <p className="text-[10px] text-center text-gray-400 font-medium">
           {t('export_description')}
         </p>
       </div>

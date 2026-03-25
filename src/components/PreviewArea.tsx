@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Image as ImageIcon, RefreshCw, Sun, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Download, Image as ImageIcon, RefreshCw, Sun, Menu, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { cn } from '../utils/cn';
 import { DecorativeElements } from './DecorativeElements';
@@ -52,6 +52,9 @@ interface PreviewAreaProps {
   cardRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
   textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>;
   handleCardEdit: (idx: number, newContent: string) => void;
+  videoUrls: Record<number, string>;
+  handleAnimateToVideo: (idx: number) => void;
+  isGeneratingVideo: boolean;
 }
 
 export const PreviewArea = ({
@@ -61,7 +64,10 @@ export const PreviewArea = ({
   style,
   cardRefs,
   textareaRefs,
-  handleCardEdit
+  handleCardEdit,
+  videoUrls,
+  handleAnimateToVideo,
+  isGeneratingVideo
 }: PreviewAreaProps) => {
   const { t } = useTranslation();
 
@@ -148,6 +154,18 @@ export const PreviewArea = ({
           {/* Background Texture Overlay */}
           <Texture style={style} />
   
+          {/* Video Overlay */}
+          {videoUrls[idx] && (
+            <video 
+              src={videoUrls[idx]} 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="absolute inset-0 z-[20] w-full h-full object-cover pointer-events-none"
+            />
+          )}
+
           {/* Title */}
           {style.title && (
             <div 
@@ -275,7 +293,36 @@ export const PreviewArea = ({
         </div>
   
         {/* Individual Export Button */}
-        <div className="absolute -top-4 -right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+        <div className="absolute -top-4 -right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[110]">
+          <button
+            onClick={() => handleAnimateToVideo(idx)}
+            disabled={isGeneratingVideo}
+            className={cn(
+              "p-3 bg-yellow-400 rounded-2xl shadow-xl hover:bg-yellow-500 text-black transition-all active:scale-90 border border-yellow-500/20",
+              isGeneratingVideo && "animate-pulse"
+            )}
+            title="Animate this card"
+          >
+            {isGeneratingVideo ? (
+              <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Play className="w-5 h-5 fill-black" />
+            )}
+          </button>
+          {videoUrls[idx] && (
+            <button
+              onClick={() => {
+                const link = document.createElement('a');
+                link.download = `social-card-${idx + 1}.mp4`;
+                link.href = videoUrls[idx];
+                link.click();
+              }}
+              className="p-3 bg-emerald-500 rounded-2xl shadow-xl hover:bg-emerald-600 text-white transition-all active:scale-90 border border-emerald-400/20"
+              title="Download video"
+            >
+              <Download className="w-5 h-5" />
+            </button>
+          )}
           <button
             onClick={async () => {
               const node = cardRefs.current[idx];

@@ -76,6 +76,8 @@ export default function App() {
   });
 
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const [videoUrls, setVideoUrls] = useState<Record<number, string>>({});
 
   const [showLanding, setShowLanding] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -142,6 +144,87 @@ export default function App() {
       setShareStatus('error');
     } finally {
       setIsGeneratingImage(false);
+    }
+  };
+
+  const handleAnimateToVideo = async (idx: number) => {
+    if (!cards[idx]) return;
+    
+    // Check for API key for Veo
+    const aiWindow = window as any;
+    if (aiWindow.aistudio && !(await aiWindow.aistudio.hasSelectedApiKey())) {
+      await aiWindow.aistudio.openSelectKey();
+    }
+
+    setIsGeneratingVideo(true);
+    try {
+      const node = cardRefs.current[idx];
+      if (!node) throw new Error("Card node not found");
+
+      // Capture card as image
+      const dataUrl = await toPng(node, { 
+        pixelRatio: 2, 
+        backgroundColor: style.backgroundColor,
+        cacheBust: true 
+      });
+      
+      const base64Data = dataUrl.split(',')[1];
+      
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      
+      // Map aspect ratio
+      let veoAspectRatio: '16:9' | '9:16' = '9:16';
+      if (style.aspectRatio === '16:9') {
+        veoAspectRatio = '16:9';
+      } else {
+        veoAspectRatio = '9:16';
+      }
+
+      const prompt = `Animate this social media card with subtle, elegant motion. 
+      The background elements should move gently, and there should be a soft shimmer or light effect. 
+      Keep the text perfectly legible and static. The overall feel should be professional and engaging for social media.
+      The video should be approximately 10 seconds long.`;
+
+      let operation = await ai.models.generateVideos({
+        model: 'veo-3.1-fast-generate-preview',
+        prompt: prompt,
+        image: {
+          imageBytes: base64Data,
+          mimeType: 'image/png',
+        },
+        config: {
+          numberOfVideos: 1,
+          resolution: '720p',
+          aspectRatio: veoAspectRatio
+        }
+      });
+
+      // Poll for completion
+      while (!operation.done) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        operation = await ai.operations.getVideosOperation({ operation: operation });
+      }
+
+      const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+      if (downloadLink) {
+        const apiKey = process.env.GEMINI_API_KEY;
+        const videoResponse = await fetch(downloadLink, {
+          method: 'GET',
+          headers: {
+            'x-goog-api-key': apiKey!,
+          },
+        });
+        const videoBlob = await videoResponse.blob();
+        const videoUrl = URL.createObjectURL(videoBlob);
+        
+        setVideoUrls(prev => ({ ...prev, [idx]: videoUrl }));
+      }
+    } catch (err) {
+      console.error("Video generation failed:", err);
+      setErrorMessage("Failed to generate video. Please try again.");
+      setShareStatus('error');
+    } finally {
+      setIsGeneratingVideo(false);
     }
   };
 
@@ -406,6 +489,8 @@ export default function App() {
         applyTheme={applyTheme}
         handleGenerateAIImage={handleGenerateAIImage}
         isGeneratingImage={isGeneratingImage}
+        handleAnimateToVideo={handleAnimateToVideo}
+        isGeneratingVideo={isGeneratingVideo}
       />
 
       {showAccountSelector && (
@@ -475,6 +560,9 @@ export default function App() {
         cardRefs={cardRefs}
         textareaRefs={textareaRefs}
         handleCardEdit={handleCardEdit}
+        videoUrls={videoUrls}
+        handleAnimateToVideo={handleAnimateToVideo}
+        isGeneratingVideo={isGeneratingVideo}
       />
 
       <style dangerouslySetInnerHTML={{ __html: `
