@@ -105,7 +105,8 @@ export default function App() {
     if (!cards.length) return;
     setIsGeneratingImage(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+      const ai = new GoogleGenAI({ apiKey: apiKey! });
       // Use the first card's text or the full text as context
       const contextText = cards[0] || text;
       const prompt = `Create a very simplistic, minimalistic, abstract background image inspired by the following text: "${contextText}". 
@@ -170,7 +171,8 @@ export default function App() {
       
       const base64Data = dataUrl.split(',')[1];
       
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+      const ai = new GoogleGenAI({ apiKey: apiKey! });
       
       // Map aspect ratio
       let veoAspectRatio: '16:9' | '9:16' = '9:16';
@@ -207,7 +209,7 @@ export default function App() {
 
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
       if (downloadLink) {
-        const apiKey = process.env.GEMINI_API_KEY;
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
         const videoResponse = await fetch(downloadLink, {
           method: 'GET',
           headers: {
