@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Sun, Home, HelpCircle, Type, Palette, Square, Frame, Sparkles, Download, MoreHorizontal, Layout, X, Play, Square as StopIcon, Image as ImageIcon
+  Sun, Home, HelpCircle, Type, Palette, Square, Frame, Sparkles, Download, MoreHorizontal, Layout, X, Image as ImageIcon
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { CollapsibleSection } from './CollapsibleSection';
@@ -35,8 +35,8 @@ interface SidebarProps {
   shareStatus: string;
   handleGenerateAIImage: () => void;
   isGeneratingImage: boolean;
-  handleAnimateToVideo: (idx: number) => void;
-  isGeneratingVideo: boolean;
+  // handleAnimateToVideo: (idx: number) => void;
+  // isGeneratingVideo: boolean;
 }
 
 export const Sidebar = ({
@@ -66,8 +66,8 @@ export const Sidebar = ({
   shareStatus,
   handleGenerateAIImage,
   isGeneratingImage,
-  handleAnimateToVideo,
-  isGeneratingVideo
+  // handleAnimateToVideo,
+  // isGeneratingVideo
 }: SidebarProps) => {
   console.log('Using monolithic Sidebar');
   const { t, language, setLanguage } = useTranslation();
@@ -990,6 +990,7 @@ export const Sidebar = ({
 
       {/* Fixed Bottom Export Section */}
       <div className="p-6 border-t border-gray-100 bg-white space-y-3">
+        {/*
         <button
           onClick={() => handleAnimateToVideo(0)}
           disabled={isGeneratingVideo || cards.length === 0}
@@ -1005,6 +1006,7 @@ export const Sidebar = ({
           )}
           {isGeneratingVideo ? t('generating_video' as any) : t('animate_to_video' as any)}
         </button>
+        */}
 
         <button
           onClick={handleExportAll}

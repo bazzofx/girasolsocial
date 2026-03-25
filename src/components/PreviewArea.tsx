@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Image as ImageIcon, RefreshCw, Sun, Menu, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { Download, Image as ImageIcon, RefreshCw, Sun, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { cn } from '../utils/cn';
 import { DecorativeElements } from './DecorativeElements';
@@ -52,9 +52,9 @@ interface PreviewAreaProps {
   cardRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
   textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>;
   handleCardEdit: (idx: number, newContent: string) => void;
-  videoUrls: Record<number, string>;
-  handleAnimateToVideo: (idx: number) => void;
-  isGeneratingVideo: boolean;
+  // videoUrls: Record<number, string>;
+  // handleAnimateToVideo: (idx: number) => void;
+  // isGeneratingVideo: boolean;
 }
 
 export const PreviewArea = ({
@@ -65,9 +65,9 @@ export const PreviewArea = ({
   cardRefs,
   textareaRefs,
   handleCardEdit,
-  videoUrls,
-  handleAnimateToVideo,
-  isGeneratingVideo
+  // videoUrls,
+  // handleAnimateToVideo,
+  // isGeneratingVideo
 }: PreviewAreaProps) => {
   const { t } = useTranslation();
 
@@ -155,6 +155,7 @@ export const PreviewArea = ({
           <Texture style={style} />
   
           {/* Video Overlay */}
+          {/*
           {videoUrls[idx] && (
             <video 
               src={videoUrls[idx]} 
@@ -165,6 +166,7 @@ export const PreviewArea = ({
               className="absolute inset-0 z-[20] w-full h-full object-cover pointer-events-none"
             />
           )}
+          */}
 
           {/* Title */}
           {style.title && (
@@ -294,6 +296,7 @@ export const PreviewArea = ({
   
         {/* Individual Export Button */}
         <div className="absolute -top-4 -right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[110]">
+          {/*
           <button
             onClick={() => handleAnimateToVideo(idx)}
             disabled={isGeneratingVideo}
@@ -323,6 +326,7 @@ export const PreviewArea = ({
               <Download className="w-5 h-5" />
             </button>
           )}
+          */}
           <button
             onClick={async () => {
               const node = cardRefs.current[idx];

@@ -10,7 +10,7 @@ import { Sidebar } from './components/Sidebar';
 import { PreviewArea } from './components/PreviewArea';
 import { CardStyle, SplitMode } from './types';
 import { THEMES, FONTS, GRADIENTS, DECORATIVE_ELEMENTS, TEXTURES } from './constants';
-import { X, Sparkles as SparklesIcon, Play, Square as StopIcon, Image as ImageIcon } from 'lucide-react';
+import { X, Sparkles as SparklesIcon, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
 import { GoogleGenAI } from "@google/genai";
 
@@ -76,8 +76,8 @@ export default function App() {
   });
 
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
-  const [videoUrls, setVideoUrls] = useState<Record<number, string>>({});
+  // const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  // const [videoUrls, setVideoUrls] = useState<Record<number, string>>({});
 
   const [showLanding, setShowLanding] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -105,7 +105,7 @@ export default function App() {
     if (!cards.length) return;
     setIsGeneratingImage(true);
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+      const apiKey = process.env.GEMINI_API_KEY;
       const ai = new GoogleGenAI({ apiKey: apiKey! });
       // Use the first card's text or the full text as context
       const contextText = cards[0] || text;
@@ -148,6 +148,7 @@ export default function App() {
     }
   };
 
+  /*
   const handleAnimateToVideo = async (idx: number) => {
     if (!cards[idx]) return;
     
@@ -171,7 +172,7 @@ export default function App() {
       
       const base64Data = dataUrl.split(',')[1];
       
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+      const apiKey = process.env.GEMINI_API_KEY;
       const ai = new GoogleGenAI({ apiKey: apiKey! });
       
       // Map aspect ratio
@@ -209,7 +210,7 @@ export default function App() {
 
       const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
       if (downloadLink) {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GEMINI_API_KEY;
         const videoResponse = await fetch(downloadLink, {
           method: 'GET',
           headers: {
@@ -229,6 +230,7 @@ export default function App() {
       setIsGeneratingVideo(false);
     }
   };
+  */
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
@@ -491,8 +493,8 @@ export default function App() {
         applyTheme={applyTheme}
         handleGenerateAIImage={handleGenerateAIImage}
         isGeneratingImage={isGeneratingImage}
-        handleAnimateToVideo={handleAnimateToVideo}
-        isGeneratingVideo={isGeneratingVideo}
+        // handleAnimateToVideo={handleAnimateToVideo}
+        // isGeneratingVideo={isGeneratingVideo}
       />
 
       {showAccountSelector && (
@@ -562,9 +564,9 @@ export default function App() {
         cardRefs={cardRefs}
         textareaRefs={textareaRefs}
         handleCardEdit={handleCardEdit}
-        videoUrls={videoUrls}
-        handleAnimateToVideo={handleAnimateToVideo}
-        isGeneratingVideo={isGeneratingVideo}
+        // videoUrls={videoUrls}
+        // handleAnimateToVideo={handleAnimateToVideo}
+        // isGeneratingVideo={isGeneratingVideo}
       />
 
       <style dangerouslySetInnerHTML={{ __html: `
